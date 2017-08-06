@@ -14,8 +14,8 @@ func TestNameHandler(t *testing.T) {
 	}
 
 	rec := httptest.NewRecorder()
-	nameHandler(rec, req)
 
+	nameHandler(rec, req)
 	if rec.Code != http.StatusOK {
 		t.Error("exected 200 and got:", rec.Code)
 	}
