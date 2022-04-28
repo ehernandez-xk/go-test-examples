@@ -26,6 +26,7 @@ func (t *tracer) Trace(a ...interface{}) {
 	fmt.Fprintln(t.out)
 }
 
+
 // prints in the stdout a text
 func main() {
 	t := New(os.Stdout)
