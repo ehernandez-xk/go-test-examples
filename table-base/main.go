@@ -13,6 +13,11 @@ func reverse(tx string) (out string) {
 	return
 }
 
+func sum() {
+	fmt.Println("sum")
+	return
+}
+
 func main() {
 	fmt.Println(reverse("hola"))
 }
