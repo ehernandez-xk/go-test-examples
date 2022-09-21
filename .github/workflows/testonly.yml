@@ -1,0 +1,41 @@
+name: Only-Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+env:
+  FORESIGHT_UPLOADER_SIGNER_URL: https://upload.service.runforesight.me
+  
+jobs:
+  build-cov-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+    - name: Test
+      run: |
+        mkdir cov
+        mkdir test
+        go clean -testcache 
+        go test -v > test/out.txt ./... -coverprofile=cov/coverage.out
+        cat test/out.txt
+    - name: Thundra Registry
+      if: success() || failure()
+      run: |
+        ls -lR
+        npm config set registry ${{ secrets.THUNDRA_REGISTRY }}
+        npm config set _auth ${{ secrets.THUNDRA_REGISTRY_AUTH }}
+    - name: Foresight Action
+      if: success() || failure()
+      uses: runforesight/foresight-test-kit-action@v1
+      with:
+        api_key: ${{ secrets.THUNDRA_APIKEY }}
+        test_framework: golang
+        test_format: text
+        test_path: test/out.txt
