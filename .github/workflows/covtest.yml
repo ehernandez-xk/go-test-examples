@@ -1,4 +1,4 @@
-name: Only-Test
+name: Cov-Test
 
 on:
   push:
